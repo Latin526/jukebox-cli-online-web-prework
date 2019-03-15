@@ -2,17 +2,18 @@
 #make sure to edit the value of each key to replace < path to this directory >
 #with the correct path to this directory on your computer
 
-my_songs = {
-  "Go Go GO" => "/Users/kody/Development/code/jukebox-cli-online-web-prework/audio/Emerald-Park/01.mp3",
-  "LiberTeens" => "/Users/kody/Development/code/jukebox-cli-online-web-prework/audio/Emerald-Park/02.mp3",
-  "Hamburg" => "/Users/kody/Development/code/jukebox-cli-online-web-prework/audio/Emerald-Park/03.mp3",
-  "Guiding Light" => "/Users/kody/Development/code/jukebox-cli-online-web-prework/audio/Emerald-Park/04.mp3",
-  "Wolf" => "/Users/kody/Development/code/jukebox-cli-online-web-prework/audio/Emerald-Park/05.mp3",
-  "Blue" => "/Users/kody/Development/code/jukebox-cli-online-web-prework/audio/Emerald-Park/06.mp3",
-  "Graduation Failed" => "/Users/kody/Development/code/jukebox-cli-online-web-prework/audio/Emerald-Park/07.mp3",
-}
+ my_songs = {
+ "Go Go GO" => '/home/nitrous/code/labs/jukebox-cli-001-prework-web/audio/Emerald-Park/01.mp3',
+ "LiberTeens" => '/home/nitrous/code/labs/jukebox-cli-001-prework-web/audio/Emerald-Park/02.mp3',
+ "Hamburg" =>  '/home/nitrous/code/labs/jukebox-cli-001-prework-web/audio/Emerald-Park/03.mp3',
+ "Guiding Light" => '/home/nitrous/code/labs/jukebox-cli-001-prework-web/audio/Emerald-Park/04.mp3',
+ "Wolf" => '/home/nitrous/code/labs/jukebox-cli-001-prework-web/audio/Emerald-Park/05.mp3',
+ "Blue" => '/home/nitrous/code/labs/jukebox-cli-001-prework-web/audio/Emerald-Park/06.mp3',
+ "Graduation Failed" => '/home/nitrous/code/labs/jukebox-cli-001-prework-web/audio/Emerald-Park/07.mp3'
+ }
 
 def help
+  #this method should be the same as in jukebox.rb
   puts "I accept the following commands:"
   puts "- help : displays this help message"
   puts "- list : displays a list of songs you can play"
@@ -23,11 +24,9 @@ end
 def list(my_songs)
   #this method is different! Collect the keys of the my_songs hash and
   #list the songs by name
-  count = 1
-  my_songs.each do |name, song_dir|
-    puts "#{count}. #{name}"
-    count += 1
-  end
+  my_songs.each { |song, location|
+    puts song
+    }
 end
 
 def play(my_songs)
@@ -38,38 +37,51 @@ def play(my_songs)
   #if it isn't, tell them their choice is invalid
   #if it is, play the song using the system 'open <file path>' syntax
   #get the file path of the song by looking it up in the my_songs hash
-
   puts "Please enter a song name:"
   user_response = gets.chomp
-
-  my_songs.each do |name, song_dir|
-    if user_response == name
-      return system "open #{song_dir}"
+  my_songs.each { |song, location|
+    if user_response == song
+      system 'open ' + location
     end
+      }
+  if user_response == "list"
+    list(my_songs)
+    play(my_songs)
+  else
+    puts "Invalid input, please try again:"
+    play(my_songs)
   end
-  puts "Invalid input, please try again."
 end
 
 def exit_jukebox
+  #this method is the same as in jukebox.rb
   puts "Goodbye"
 end
 
 def run(my_songs)
+  #this method is the same as in jukebox.rb
   help
   puts "Please enter a command:"
   user_response = gets.chomp
   while user_response != "exit"
-    if user_response == "list"
-      list(my_songs)
-    elsif user_response == "play"
-      play(my_songs)
-    elsif user_response == "help"
-      help
+    case user_response
+      when "help"
+        help
+        puts "Please enter a command:"
+        user_response = gets.chomp
+      when "list"
+        list(my_songs)
+        puts "Please enter a command:"
+        user_response = gets.chomp
+      when "play"
+        play(my_songs)
+        puts "Please enter a command:"
+        user_response = gets.chomp
+      when "exit"
+        exit_jukebox
+      else
+        puts "Invalid input, please try again:"
+        user_response = gets.chomp
+      end
     end
-    puts "Please enter a command:"
-    user_response = gets.chomp
-  end
-  exit_jukebox
 end
-
-run(my_songs)
